@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Paper } from '@material-ui/core';
+import { TextField, Button, Typography, Paper, MenuItem } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 // import FileBase from 'react-file-base64';
 
 import { createPost, updatePost } from '../../actions/posts';
 import useStyles from './styles';
+const sexes = [
+  { 
+    lable: '♂ Male',
+    value: 'Male'
+  }, 
+  {
+    lable: '♀ Female',
+    value: 'Female'
+  }
+]
 
 const Form = ({ currentId, setCurrentId }) => {
 
@@ -49,12 +59,29 @@ const Form = ({ currentId, setCurrentId }) => {
     <Paper className={classes.paper}>
       <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
         <Typography variant="h6">{currentId ? `Editing "${post.patientName}"` : 'Register Patient'}</Typography>
-        <TextField name="patientNumber" variant="outlined" label="Patient Number" fullWidth value={postData.patientNumber} onChange={(e) => setPostData({ ...postData, patientNumber: e.target.value })} />
-        <TextField name="patientName" variant="outlined" label="Patient Name" fullWidth  value={postData.patientName} onChange={(e) => setPostData({ ...postData, patientName: e.target.value })} />
-        <TextField name="phoneNumber" variant="outlined" label="Phone Number" fullWidth value={postData.phoneNumber} onChange={(e) => setPostData({ ...postData, phoneNumber: e.target.value })} />
-        <TextField name="age" variant="outlined" label="Age" fullWidth value={postData.age} onChange={(e) => setPostData({ ...postData, age: e.target.value })} />
-        <TextField name="gender" variant="outlined" label="Gender" fullWidth value={postData.gender} onChange={(e) => setPostData({ ...postData, gender: e.target.value })} />
-        <TextField name="viralLoad" variant="outlined" label="Batch Number" fullWidth value={postData.viralLoad} onChange={(e) => setPostData({ ...postData, viralLoad: e.target.value })} />
+        <TextField name="patientNumber" variant="outlined" label="Patient Number" required fullWidth value={postData.patientNumber} onChange={(e) => setPostData({ ...postData, patientNumber: e.target.value })} />
+        <TextField name="patientName" variant="outlined" label="Patient Name" required fullWidth  value={postData.patientName} onChange={(e) => setPostData({ ...postData, patientName: e.target.value })} />
+        <TextField name="phoneNumber" variant="outlined" label="Phone Number" required fullWidth value={postData.phoneNumber} onChange={(e) => setPostData({ ...postData, phoneNumber: e.target.value })} />
+        <TextField name="age" variant="outlined" required label="Age" fullWidth value={postData.age} onChange={(e) => setPostData({ ...postData, age: e.target.value })} />
+        
+        <TextField
+          id="gender"
+          select
+          label="Gender"
+          fullWidth
+          required
+          value={postData.gender}
+          onChange={(e) => setPostData({ ...postData, gender: e.target.value })}
+          helperText="Please Gender"
+          variant="outlined"
+        >
+          {sexes.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.lable}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField name="viralLoad" variant="outlined" required label="Batch Number" fullWidth value={postData.viralLoad} onChange={(e) => setPostData({ ...postData, viralLoad: e.target.value })} />
         <TextField name="appointmentDate" type="date" variant="outlined" label="Appointment Date" fullWidth value={postData.appointmentDate} onChange={(e) => setPostData({ ...postData, appointmentDate: e.target.value })} />
         {/* <div className={classes.fileInput}><FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })} /></div> */}
         <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>

@@ -209,6 +209,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 export default function Posts() {
   const posts = useSelector((state) => state.posts);
   const [data, setData] = useState(posts)
@@ -271,7 +273,7 @@ export default function Posts() {
 
   const requestSearchVal = (searchVal) => {
     const filteredRows = posts.filter((row => {
-      return row.patientName.toLowerCase().includes(searchVal.toLowerCase())
+      return row.patientNumber.toString().toLowerCase().includes(searchVal.toLowerCase())
     }))
     setData(filteredRows)
   }
@@ -292,7 +294,7 @@ export default function Posts() {
             <EnhancedTableToolbar numSelected={selected.length} />
             <TableContainer>
               <SearchBar
-                placeholder='Search Patient by Name'
+                placeholder='Search Patient Number'
                 value={searched}
                 onChange={(searchVal => requestSearchVal(searchVal))}
                 onCancelSearch={()=> cancelSearch()}
