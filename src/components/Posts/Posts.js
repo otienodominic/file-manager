@@ -20,6 +20,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import EditIcon from '@material-ui/icons/Edit';
 // import SearchBar from 'material-ui-search-bar';
 import { Grid, CircularProgress, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
@@ -140,7 +141,7 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }));
 
-const EnhancedTableToolbar = (props) => {
+const EnhancedTableToolbar = (props) => {  
   const classes = useToolbarStyles();
   const { numSelected, post } = props;
   const dispatch = useDispatch();
@@ -165,9 +166,18 @@ const EnhancedTableToolbar = (props) => {
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
-          <Button size="small" color="secondary" onClick={() => dispatch(deletePost(post._id))}>
-            <DeleteIcon fontSize="small" /> Delete
-          </Button>
+            <>
+            <Grid>
+              <Button size="small" color="secondary"  onClick={() => dispatch(deletePost(post._id))}>
+                <DeleteIcon fontSize="small" /> Delete
+              </Button>
+            </Grid>
+            <Grid>              
+              <Button  style={{ color: 'white' }} size="small">
+                <EditIcon fontSize="small" /> Edit
+              </Button>
+            </Grid>
+          </>
           )}
         </Tooltip>
       ) : (
@@ -211,7 +221,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Posts() {
+export default function Posts({ setCurrentId }) {
   const posts = useSelector((state) => state.posts);
   const [data, setData] = useState(posts)
   const classes = useStyles();
@@ -273,7 +283,7 @@ export default function Posts() {
 
   const requestSearchVal = (searchVal) => {
     const filteredRows = posts.filter((row => {
-      return row.patientNumber.toString().toLowerCase().includes(searchVal.toLowerCase())
+      return row.patientNumber.toString().toLowerCase().includes(searchVal.toLowerCase()) || row.patientName.toString().toLowerCase().includes(searchVal.toLowerCase())
     }))
     setData(filteredRows)
   }
@@ -294,7 +304,7 @@ export default function Posts() {
             <EnhancedTableToolbar numSelected={selected.length} />
             <TableContainer>
               <SearchBar
-                placeholder='Search Patient Number'
+                placeholder='Search Patient Number or Name'
                 value={searched}
                 onChange={(searchVal => requestSearchVal(searchVal))}
                 onCancelSearch={()=> cancelSearch()}
@@ -334,8 +344,9 @@ export default function Posts() {
                         >
                           <TableCell padding="checkbox">
                             <Checkbox
-                              checked={isItemSelected}
+                              checked={isItemSelected }
                               inputProps={{ 'aria-labelledby': labelId }}
+                              // onChange={setCurrentId(post._id)}
                             />
                           </TableCell>
                           <TableCell component="th" id={labelId} scope="row" padding="none">
