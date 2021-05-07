@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { getPosts } from '../../actions/posts';
 import Posts from '../Posts/Posts';
+// import Ninja from '../Table/index'
 import Form from '../Form/Form';
 
 const Home = () => {
@@ -19,7 +20,7 @@ const Home = () => {
       <Container>
         <Grid container justify="space-between"  alignItems="stretch" spacing={2}>
           <Grid item xs={12} sm={7}>
-            <Posts setCurrentId={setCurrentId} />
+            <Posts setCurrentId={setCurrentId} />      
           </Grid>
           <Grid item xs={12} sm={4}>
             <Form currentId={currentId} setCurrentId={setCurrentId} />

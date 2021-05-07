@@ -48,7 +48,7 @@ const Navbar = (props) => {
       if (decodedToken.exp * 1000 < new Date().getTime()) logout();
     }
     setUser(JSON.parse(localStorage.getItem('profile')));
-  }, [location, logout]);
+  }, [location,logout,user?.token]);
 
   const displayDesktop = () => {
     return ( 
@@ -79,7 +79,7 @@ const Navbar = (props) => {
         <IconButton
           {...{
             edge: false,
-            color: "inherit",
+            color: "secondary",
             "aria-label": "menu",
             "aria-haspopup": "true",
             onClick: handleDrawerOpen,
@@ -127,7 +127,6 @@ const Navbar = (props) => {
       )
    
   };
-
 
   const femmecubatorLogo = (
     <div className={brandContainer}>

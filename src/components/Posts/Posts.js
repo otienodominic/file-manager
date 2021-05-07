@@ -21,6 +21,7 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import EditIcon from '@material-ui/icons/Edit';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 // import SearchBar from 'material-ui-search-bar';
 import { Grid, CircularProgress, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
@@ -221,8 +222,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Posts({ setCurrentId }) {
+export default function Posts({ post, setCurrentId }) {
   const posts = useSelector((state) => state.posts);
+  const dispatch = useDispatch();
   const [data, setData] = useState(posts)
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
@@ -287,7 +289,7 @@ export default function Posts({ setCurrentId }) {
     }))
     setData(filteredRows)
   }
-
+  const googleAlert = () => alert('Record Deleted Successfully! refresh to view changes');
   const cancelSearch =()=>{
     setSearched('')
     requestSearchVal(searched)
@@ -335,29 +337,42 @@ export default function Posts({ setCurrentId }) {
                       return (
                         <TableRow
                           hover
-                          onClick={(event) => handleClick(event, post.patientNumber)}
+                          // onClick={(event) => handleClick(event, post.patientNumber)}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={post.patientNumber}
+                          key={post._id}
                           selected={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
+                          
+                          <TableCell padding="checkbox">                          
+                          
+                            <Button onClick={() => setCurrentId(post._id)} style={{ color: 'white' }} size="small">
+                              <EditIcon color='primary' />
+                            </Button>
+                                                      
+                            {/* <Checkbox
                               checked={isItemSelected }
                               inputProps={{ 'aria-labelledby': labelId }}
                               // onChange={setCurrentId(post._id)}
-                            />
+                            /> */}
                           </TableCell>
                           <TableCell component="th" id={labelId} scope="row" padding="none">
                             {post.patientNumber}
                           </TableCell>
                           <TableCell align="right">{post.patientName}</TableCell>
                           <TableCell align="right">{post.phoneNumber}</TableCell>
-                          <TableCell align="right">{post.age}</TableCell>
+                          <TableCell align="right">{post.age ==null ? (moment().diff(post.dateOfBirth, 'years')) : post.age}</TableCell>
                           <TableCell align="right">{post.gender}</TableCell>
-                          <TableCell align="right">{moment(post.appointmentDate).format('MMMM Do YYYY')}</TableCell>
+                          <TableCell align="right">{moment(post.appointmentDate).format('MMM Do YYYY')}</TableCell>
                           <TableCell align="right">{post.viralLoad}</TableCell>
+                          <TableCell>
+                          {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
+                            <Button size="small" color="secondary" onClick={() => dispatch(deletePost(post._id))}>
+                              <DeleteIcon fontSize="small" /> Delete
+                            </Button>
+                            )}                            
+                          </TableCell>
                         </TableRow>
                       );
                     }))}
@@ -392,91 +407,8 @@ export default function Posts({ setCurrentId }) {
   );
 }
 
-// import React, {useState} from 'react';
-// import { makeStyles } from "@material-ui/core/styles";
-// import Table from "@material-ui/core/Table";
-// import TableBody from "@material-ui/core/TableBody";
-// import TableCell from "@material-ui/core/TableCell";
-// import TableContainer from "@material-ui/core/TableContainer";
-// import TableHead from "@material-ui/core/TableHead";
-// import TableRow from "@material-ui/core/TableRow";
-// import Paper from "@material-ui/core/Paper";
-// import SearchBar from "material-ui-search-bar";
-// import { Grid, CircularProgress } from '@material-ui/core';
-// import { useSelector } from 'react-redux';
 
-// // import Post from './Post/Post';
-// // import useStyles from './styles';
 
-// const useStyles = makeStyles({
-//   table: {
-//     minWidth: 650
-//   }
-// });
-
-// const Posts = ({ setCurrentId }) => {
-//   const posts = useSelector((state) => state.posts);
-//   console.log(posts)
-//   const classes = useStyles();
-//   const [rows, setRows] = useState(posts);
-//   const [searched, setSearched] = useState("");
-
-//   const requestSearch = (searchedVal) => {
-//     const filteredRows = posts.filter((row) => {
-//       return row.patientNumber.includes(searchedVal);
-//     });
-//     setRows(filteredRows);
-//   };
-
-//   const cancelSearch = () => {
-//     setSearched("");
-//     requestSearch(searched);
-//   };
-
-//   return (
-//     !posts.length ? <CircularProgress /> : (
-//       <Paper>
-//         <SearchBar
-//           value={searched}
-//           onChange={(searchVal) => requestSearch(searchVal)}
-//           onCancelSearch={() => cancelSearch()}
-//         />
-//         <TableContainer>
-//           <Table className={classes.table} aria-label="simple table">
-//             <TableHead>
-//               <TableRow>
-//                 <TableCell>Patient Number</TableCell>
-//                 <TableCell align="right">Patient Name</TableCell>
-//                 <TableCell align="right">Phone Number&nbsp;(mobile)</TableCell>
-//                 <TableCell align="right">Age&nbsp;(Years)</TableCell>
-//                 <TableCell align="right">Gender&nbsp;(M/F)</TableCell>
-//                 <TableCell align="right">Appointment Date</TableCell>
-//                 <TableCell align="right">Batch Number</TableCell>
-//               </TableRow>
-//             </TableHead>
-//             <TableBody>
-//               {rows.map((row) => (
-//                 <TableRow key={row.patientNumber}>
-//                   <TableCell component="th" scope="row">
-//                     {row.patientNumber}
-//                   </TableCell>
-//                   <TableCell align="right">{row.patientName}</TableCell>
-//                   <TableCell align="right">{row.phoneNumber}</TableCell>
-//                   <TableCell align="right">{row.age}</TableCell>
-//                   <TableCell align="right">{row.gender}</TableCell>
-//                   <TableCell align="right">{row.appointmentDate}</TableCell>
-//                   <TableCell align="right">{row.viralLoad}</TableCell>
-//                 </TableRow>
-//               ))}
-//             </TableBody>
-//           </Table>
-//         </TableContainer>
-//       </Paper>
-//     )
-//   );
-// };
-
-// export default Posts;
 
 // import React from 'react';
 // import { Grid, CircularProgress } from '@material-ui/core';
