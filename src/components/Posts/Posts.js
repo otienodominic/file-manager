@@ -25,7 +25,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 // import SearchBar from 'material-ui-search-bar';
 import { Grid, CircularProgress, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-
+import Download from './Download'
 import moment from 'moment';
 import { deletePost } from '../../actions/posts';
 import SearchBar from 'material-ui-search-bar';
@@ -159,9 +159,12 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
+        <>
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           Patient List
         </Typography>
+        <Download />
+        </>
       )}
 
       {numSelected > 0 ? (
