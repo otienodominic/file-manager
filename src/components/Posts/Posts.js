@@ -72,6 +72,8 @@ function EnhancedTableHead(props) {
     onRequestSort(event, property);
   };
 
+ 
+
   return (
     <TableHead>
       <TableRow>
@@ -238,6 +240,10 @@ export default function Posts({ post, setCurrentId }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searched, setSearched] = useState('');
 
+  // console.log(posts[8900].creator)
+
+  // checkedInBy creator 
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -301,6 +307,7 @@ export default function Posts({ post, setCurrentId }) {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, posts.length - page * rowsPerPage);
   const user = localStorage.getItem('profile');
+  
   return (
     <div className={classes.root}>
       {
@@ -370,11 +377,11 @@ export default function Posts({ post, setCurrentId }) {
                           <TableCell align="right">{moment(post.appointmentDate).format('MMM Do YYYY')}</TableCell>
                           <TableCell align="right">{post.viralLoad}</TableCell>
                           <TableCell>
-                          {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
+                          {/* {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (                            
+                            )}   */}
                             <Button size="small" color="secondary" onClick={() => dispatch(deletePost(post._id))}>
                               <DeleteIcon fontSize="small" /> Delete
-                            </Button>
-                            )}                            
+                            </Button>                          
                           </TableCell>
                         </TableRow>
                       );
